@@ -1,0 +1,15 @@
+name: ${{APP_NAME:-default}}
+options:
+  services:
+    - name: sync-consumer
+      options:
+        value: wp-queue-sync
+        url: ${{RABBITMQ_URL:-amqp://guest:guest@localhost:5672}}
+    - name: sync-producer
+      options:
+        value: wp-queue-sync
+        url: ${{RABBITMQ_URL:-amqp://guest:guest@localhost:5672}}
+
+  dev:
+    port: ${{APP_PORT:-3000}}
+    dbUrl: ${{DATA_BASE_URL:-mongodb://localhost:27017/mydb}}

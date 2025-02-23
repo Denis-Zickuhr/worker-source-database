@@ -1,0 +1,18 @@
+version: "3.4"
+
+services:
+  http-app:
+    restart: always
+    build:
+      context: .
+      target: dev
+    command: "npm run http-app:dev"
+    extra_hosts:
+      - "host.docker.internal:127.0.0.1"
+    ports:
+      - "0.0.0.0:3000:3000"
+    volumes:
+      - ./:/app
+      - ./src:/app/src
+      - ./bin:/app/bin
+      - /app/node_modules
