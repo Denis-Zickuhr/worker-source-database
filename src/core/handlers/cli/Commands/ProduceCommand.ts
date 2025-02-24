@@ -16,13 +16,7 @@ class ProducerCommand implements ICommand {
     }
 
     public async handler(argv: ArgumentsCamelCase): Promise<void> {
-
-        const serviceName = 'sync-producer';
-        const service = this.config.findService(serviceName);
-
-        if (!service){
-            throw new Error(`could not find service '${serviceName}'`);
-        }
+        const service = this.config.findService('sync-producer');
 
         await this.producerService.run({
             service: service

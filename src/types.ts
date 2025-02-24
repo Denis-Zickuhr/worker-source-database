@@ -10,12 +10,13 @@ const CoreReference = {
 
 const ServiceReference = {
     ProducerService: Symbol.for("IProducerService"),
-    MongodbTableService: Symbol.for("IMongodbTableService"),
+    IFollowedService: Symbol.for("IFollowedService"),
 };
 
 const AdaptersReference = {
-    IAmpqRabbitMQClient: Symbol.for("IAmpqRabbitMQClient"),
+    IAmpqClient: Symbol.for("IAmpqClient"),
     ConsoleLogger: Symbol.for("IConsoleLogger"),
+    IMongoDBClient: Symbol.for("IMongoDBClient"),
 };
 
 

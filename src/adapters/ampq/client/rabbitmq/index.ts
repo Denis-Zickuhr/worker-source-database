@@ -18,12 +18,7 @@ class AmpqRabbitMQClient implements IAmpqClient {
 
     private async connect(): Promise<void> {
         if (!this.connection) {
-            const serviceName = 'sync-consumer';
-            const service = this.config.findService(serviceName);
-
-            if (!service){
-                throw new Error(`${serviceName} not found`);
-            }
+            const service = this.config.findService('sync-consumer');
 
             this.connection = await amqp.connect(service?.options.url);
             this.logger.debug(`Started connection attempt to ${service.name} - ${service.options.url}`);

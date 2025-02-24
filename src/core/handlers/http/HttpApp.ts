@@ -4,6 +4,9 @@ import {inject, injectable} from "inversify";
 import {Reference} from "../../../types";
 import {IAppConfig} from "../../config/config";
 import ConsoleLogger from "../../../adapters/logger/ConsoleLogger";
+import {ZodError} from "zod";
+import 'express-async-errors';
+import {HttpStatus, HttpStatusMessage} from "../../../adapters/http/status";
 
 @injectable()
 export class HttpApp implements IHttpApp {
@@ -24,22 +27,23 @@ export class HttpApp implements IHttpApp {
     }
 
     private register() {
+        this.app.use(Express.json());
+        this.app.use(Express.urlencoded({ extended: true }));
         this.app.use(this.appRouter.router);
         this.app.use(this.dataRouter.router);
 
-
-        this.app.use(this.error)
+        this.app.use(this.error);
     }
 
     private error(err: any, req: Express.Request, res: Express.Response, next: Express.NextFunction) {
-        console.error(err);
-        const status = err.status || 500;
-        res.send({
-            error: {
-                message: err.message || "Internal Server Error",
-                status: status,
-            },
-        });
+        if (err instanceof ZodError) {
+            res.status(HttpStatus.BAD_REQUEST).send({status: HttpStatusMessage(HttpStatus.BAD_REQUEST), error: err});
+            return;
+        }
+
+        res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({status: HttpStatusMessage(HttpStatus.INTERNAL_SERVER_ERROR)});
+        next(err);
+        return;
     }
 
     public run(): void {

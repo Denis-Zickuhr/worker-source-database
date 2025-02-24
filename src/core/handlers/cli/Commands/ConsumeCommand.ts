@@ -12,7 +12,7 @@ class ConsumeCommand implements ICommand {
 
 
     constructor(
-        @inject(Reference.IAmpqRabbitMQClient) private consumer: AmpqRabbitMQClient,
+        @inject(Reference.IAmpqClient) private consumer: AmpqRabbitMQClient,
         @inject(Reference.AppConfig) private config: IAppConfig,
         @inject(Reference.ConsoleLogger) private logger: ConsoleLogger,
     ) {
@@ -20,12 +20,7 @@ class ConsumeCommand implements ICommand {
 
     public async handler(argv: ArgumentsCamelCase): Promise<void> {
 
-        const serviceName = 'sync-consumer';
-        const service = this.config.findService(serviceName);
-
-        if (!service){
-            throw new Error(`could not find service '${serviceName}'`);
-        }
+        const service = this.config.findService('sync-consumer');
 
         const callback = (msg: (ConsumeMessage | null)) => {
             this.logger.info(JSON.stringify(msg?.content.toString()) || '');
