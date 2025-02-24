@@ -1,21 +1,19 @@
 import * as amqp from 'amqplib';
 import {inject, injectable} from "inversify";
 import {IConsumeOptions} from "./types";
-import {Reference} from "../../../types";
-import {IAppConfig} from "../../../core/config/config";
-import logger from "../../logger";
-import {IAmpq} from "../types";
-import {promise} from "zod";
-import {resolve} from "inversify/lib/cjs/resolution/resolver";
+import {Reference} from "../../../../types";
+import {IAppConfig} from "../../../../core/config/config";
+import logger from "../../../logger/ConsoleLogger";
+import {IAmpqClient} from "../../types";
 
 @injectable()
-class AmpqRabbitMQ implements IAmpq {
+class AmpqRabbitMQClient implements IAmpqClient {
     private connection: amqp.Connection | null = null;
     private channel: amqp.Channel | null = null;
 
     constructor(
         @inject(Reference.AppConfig) private config: IAppConfig,
-        @inject(Reference.Logger) private logger: logger,
+        @inject(Reference.ConsoleLogger) private logger: logger,
     ) {}
 
     private async connect(): Promise<void> {
@@ -76,4 +74,4 @@ class AmpqRabbitMQ implements IAmpq {
     }
 }
 
-export default AmpqRabbitMQ;
+export default AmpqRabbitMQClient;

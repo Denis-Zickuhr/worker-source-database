@@ -3,7 +3,7 @@ import {IHttpApp, IRouter} from "../../types";
 import {inject, injectable} from "inversify";
 import {Reference} from "../../../types";
 import {IAppConfig} from "../../config/config";
-import Logger from "../../../adapters/logger";
+import ConsoleLogger from "../../../adapters/logger/ConsoleLogger";
 
 @injectable()
 export class HttpApp implements IHttpApp {
@@ -15,7 +15,7 @@ export class HttpApp implements IHttpApp {
         @inject(Reference.AppConfig) private config: IAppConfig,
         @inject(Reference.AppRouter) private appRouter: IRouter,
         @inject(Reference.DataRouter) private dataRouter: IRouter,
-        @inject(Reference.Logger) private logger: Logger,
+        @inject(Reference.ConsoleLogger) private logger: ConsoleLogger,
     ) {
         this.app = Express();
         this.routers = [];

@@ -3,7 +3,7 @@ import {ICommand} from "../../../types";
 import {inject, injectable} from "inversify";
 import {Reference} from "../../../../types";
 import {IAppConfig} from "../../../config/config";
-import {ProducerService} from "../../../../services/producer";
+import {ProducerService} from "../../../../services/producer/ProducerService";
 
 @injectable()
 class ProducerCommand implements ICommand {

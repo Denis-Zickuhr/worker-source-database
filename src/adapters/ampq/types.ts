@@ -1,7 +1,7 @@
-import {IConsumeOptions} from "./rabbitmq/types";
+import {IConsumeOptions} from "./client/rabbitmq/types";
 import * as amqp from 'amqplib';
 
-export interface IAmpq {
+export interface IAmpqClient {
     consume(
         options: IConsumeOptions,
         consumerCallback: (msg: amqp.ConsumeMessage | null) => void

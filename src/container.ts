@@ -6,13 +6,13 @@ import {AppRouter} from "./core/handlers/http/routers/AppRouter";
 import {DataRouter} from "./core/handlers/http/routers/v1/DataRouter";
 import {AppConfig, IAppConfig} from "./core/config/config";
 import ConfigLoader from "./core/config/loader";
-import Logger from "./adapters/logger";
+import ConsoleLogger from "./adapters/logger/ConsoleLogger";
 import CliApp from "./core/handlers/cli/CliApp";
-import AmpqRabbitMQ from "./adapters/ampq/rabbitmq";
+import AmpqRabbitMQClient from "./adapters/ampq/client/rabbitmq";
 import ConsumeCommand from "./core/handlers/cli/Commands/ConsumeCommand";
 import ProducerCommand from "./core/handlers/cli/Commands/ProduceCommand";
-import {MongodbTableService} from "./services/table/mongodb";
-import {ProducerService} from "./services/producer";
+import {MongodbTableService} from "./services/table/mongodb/MongodbTableService";
+import {ProducerService} from "./services/producer/ProducerService";
 
 const container = new Container();
 
@@ -21,8 +21,8 @@ container.bind(Reference.HttpApp).to(HttpApp);
 container.bind(Reference.CliApp).to(CliApp);
 
 // Adapters
-container.bind(Reference.Logger).to(Logger);
-container.bind(Reference.IAmpq).to(AmpqRabbitMQ);
+container.bind(Reference.ConsoleLogger).to(ConsoleLogger);
+container.bind(Reference.IAmpqRabbitMQClient).to(AmpqRabbitMQClient);
 
 container.bind(Reference.AppRouter).to(AppRouter);
 container.bind(Reference.DataRouter).to(DataRouter);

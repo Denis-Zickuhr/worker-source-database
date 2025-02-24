@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   http-app:
     restart: always

@@ -2,9 +2,9 @@ import { CommandModule, ArgumentsCamelCase } from 'yargs';
 import {ICommand} from "../../../types";
 import {inject, injectable} from "inversify";
 import {Reference} from "../../../../types";
-import AmpqRabbitMQ from "../../../../adapters/ampq/rabbitmq";
+import AmpqRabbitMQClient from "../../../../adapters/ampq/client/rabbitmq";
 import {IAppConfig} from "../../../config/config";
-import Logger from "../../../../adapters/logger";
+import ConsoleLogger from "../../../../adapters/logger/ConsoleLogger";
 import {ConsumeMessage} from "amqplib";
 
 @injectable()
@@ -12,9 +12,9 @@ class ConsumeCommand implements ICommand {
 
 
     constructor(
-        @inject(Reference.IAmpq) private consumer: AmpqRabbitMQ,
+        @inject(Reference.IAmpqRabbitMQClient) private consumer: AmpqRabbitMQClient,
         @inject(Reference.AppConfig) private config: IAppConfig,
-        @inject(Reference.Logger) private logger: Logger,
+        @inject(Reference.ConsoleLogger) private logger: ConsoleLogger,
     ) {
     }
 

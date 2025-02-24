@@ -1,16 +1,16 @@
 import {inject, injectable} from "inversify";
 import {Reference} from "../../types";
-import logger from "../../adapters/logger";
+import logger from "../../adapters/logger/ConsoleLogger";
 import {ITableService, ProducerOptions} from "../types";
-import {IAmpq} from "../../adapters/ampq/types";
+import {IAmpqClient} from "../../adapters/ampq/types";
 
 @injectable()
 export class ProducerService {
 
     constructor(
-        @inject(Reference.Logger) private logger: logger,
+        @inject(Reference.ConsoleLogger) private logger: logger,
         @inject(Reference.MongodbTableService) private tableService: ITableService,
-        @inject(Reference.IAmpq) private ampq: IAmpq,
+        @inject(Reference.IAmpqRabbitMQClient) private ampq: IAmpqClient,
     ) {
     }
 

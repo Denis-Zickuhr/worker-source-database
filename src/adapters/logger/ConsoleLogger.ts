@@ -6,7 +6,7 @@ interface LogContext {
 }
 
 @injectable()
-class Logger {
+class ConsoleLogger {
     private logger: winston.Logger;
 
     constructor() {
@@ -57,4 +57,4 @@ class Logger {
     }
 }
 
-export default Logger;
+export default ConsoleLogger;
