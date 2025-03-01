@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import {inject, injectable} from "inversify";
-import {ICliApp, ICommand} from "../../types";
-import {Reference} from "../../../types";
+import {ICliApp, ICommand} from "../types";
+import {Reference} from "../../types";
 
 @injectable()
 class CliApp implements ICliApp {

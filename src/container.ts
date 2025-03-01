@@ -1,19 +1,20 @@
 import { Container } from "inversify";
 import {Reference} from "./types";
 
-import {HttpApp} from "./core/handlers/http/HttpApp";
-import {AppRouter} from "./core/handlers/http/routers/AppRouter";
-import {DataRouter} from "./core/handlers/http/routers/v1/DataRouter";
+import {HttpApp} from "./handlers/http/HttpApp";
+import {AppRouter} from "./handlers/http/routers/AppRouter";
+import {FollowedRouter} from "./handlers/http/routers/v1/FollowedRouter";
 import {AppConfig, IAppConfig} from "./core/config/config";
 import ConfigLoader from "./core/config/loader";
 import ConsoleLogger from "./adapters/logger/ConsoleLogger";
-import CliApp from "./core/handlers/cli/CliApp";
+import CliApp from "./handlers/cli/CliApp";
 import AmpqRabbitMQClient from "./adapters/ampq/client/rabbitmq";
-import ConsumeCommand from "./core/handlers/cli/Commands/ConsumeCommand";
-import ProducerCommand from "./core/handlers/cli/Commands/ProduceCommand";
-import {FollowedService} from "./services/followed/FollowedService";
-import {ProducerService} from "./services/producer/ProducerService";
-import {MongoDBClient} from "./adapters/database/client/mongodb/MongoDBClient";
+import ConsumeCommand from "./handlers/cli/Commands/ConsumeCommand";
+import ProducerCommand from "./handlers/cli/Commands/ProduceCommand";
+import {FollowedService} from "./adapters/services/followed/FollowedService";
+import {ProducerService} from "./adapters/services/producer/ProducerService";
+import {MongoDBClient} from "./adapters/database/client/MongoDBClient";
+import {RepositoryFactory} from "./adapters/factories/RepositoryFactory";
 
 const isDevelopment: boolean = process.env.NODE_ENV === "development";
 
@@ -28,18 +29,18 @@ container.bind(Reference.ConsoleLogger).to(ConsoleLogger);
 container.bind(Reference.IAmpqClient).to(AmpqRabbitMQClient);
 
 container.bind(Reference.AppRouter).to(AppRouter);
-container.bind(Reference.DataRouter).to(DataRouter);
+container.bind(Reference.FollowedRouter).to(FollowedRouter);
 container.bind(Reference.SyncCommand).to(ConsumeCommand);
 container.bind(Reference.ProducerCommand).to(ProducerCommand);
 container.bind(Reference.ProducerService).to(ProducerService);
 container.bind(Reference.IFollowedService).to(FollowedService);
-container.bind(Reference.IMongoDBClient).to(MongoDBClient);
+container.bind(Reference.IDatabaseClient).to(MongoDBClient);
+container.bind(Reference.IRepositoryFactory).to(RepositoryFactory);
 
 
 container.bind<IAppConfig>(Reference.AppConfig).toDynamicValue(() => {
     const config = new ConfigLoader("Config.yml");
     return new AppConfig(config.load());
 });
-
 
 export { container };

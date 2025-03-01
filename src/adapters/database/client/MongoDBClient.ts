@@ -1,18 +1,20 @@
-import {MongoClient, Db} from 'mongodb';
-import {IMongoClient} from "./types";
+import {MongoClient, Db, Collection, ClientSession} from 'mongodb';
+import {IDataBaseClient} from "./types";
 import {inject, injectable} from "inversify";
-import {Reference} from "../../../../types";
-import {IAppConfig} from "../../../../core/config/config";
+import {Reference} from "../../../types";
+import {IAppConfig, Services} from "../../../core/config/config";
+import ConsoleLogger from "../../logger/ConsoleLogger";
 
 @injectable()
-export class MongoDBClient implements IMongoClient{
+export class MongoDBClient implements IDataBaseClient {
   private readonly _client: MongoClient;
   private readonly _db: Db;
 
   constructor(
       @inject(Reference.AppConfig) private readonly config: IAppConfig,
+      @inject(Reference.ConsoleLogger) private readonly logger: ConsoleLogger,
   ) {
-    const service = this.config.findService('database-connection');
+    const service = this.config.findService(Services.DATABASE_CONNECTION);
 
     this._client = new MongoClient(service.options.url);
     this._db = this._client.db(service.options.value);

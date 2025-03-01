@@ -1,6 +1,6 @@
 import Express, {Router} from "express";
 import e from "express";
-import {IRouter} from "../../../types";
+import {IRouter} from "../../types";
 import {injectable} from "inversify";
 
 @injectable()

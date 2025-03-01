@@ -2,7 +2,7 @@ import * as amqp from 'amqplib';
 import {inject, injectable} from "inversify";
 import {IConsumeOptions} from "./types";
 import {Reference} from "../../../../types";
-import {IAppConfig} from "../../../../core/config/config";
+import {IAppConfig, Services} from "../../../../core/config/config";
 import logger from "../../../logger/ConsoleLogger";
 import {IAmpqClient} from "../../types";
 
@@ -18,7 +18,7 @@ class AmpqRabbitMQClient implements IAmpqClient {
 
     private async connect(): Promise<void> {
         if (!this.connection) {
-            const service = this.config.findService('sync-consumer');
+            const service = this.config.findService(Services.SYNC_CONSUMER);
 
             this.connection = await amqp.connect(service?.options.url);
             this.logger.debug(`Started connection attempt to ${service.name} - ${service.options.url}`);

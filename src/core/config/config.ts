@@ -58,3 +58,9 @@ export class AppConfig implements IAppConfig {
         this.dev = parsedApp.options.dev;
     }
 }
+
+export enum Services {
+    DATABASE_CONNECTION = 'database-connection',
+    SYNC_PRODUCER = 'sync-producer',
+    SYNC_CONSUMER = 'sync-consumer',
+}

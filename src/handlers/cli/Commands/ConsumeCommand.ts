@@ -1,10 +1,10 @@
 import { CommandModule, ArgumentsCamelCase } from 'yargs';
-import {ICommand} from "../../../types";
+import {ICommand} from "../../types";
 import {inject, injectable} from "inversify";
-import {Reference} from "../../../../types";
-import AmpqRabbitMQClient from "../../../../adapters/ampq/client/rabbitmq";
-import {IAppConfig} from "../../../config/config";
-import ConsoleLogger from "../../../../adapters/logger/ConsoleLogger";
+import {Reference} from "../../../types";
+import AmpqRabbitMQClient from "../../../adapters/ampq/client/rabbitmq";
+import {IAppConfig, Services} from "../../../core/config/config";
+import ConsoleLogger from "../../../adapters/logger/ConsoleLogger";
 import {ConsumeMessage} from "amqplib";
 
 @injectable()
@@ -20,7 +20,7 @@ class ConsumeCommand implements ICommand {
 
     public async handler(argv: ArgumentsCamelCase): Promise<void> {
 
-        const service = this.config.findService('sync-consumer');
+        const service = this.config.findService(Services.SYNC_CONSUMER);
 
         const callback = (msg: (ConsumeMessage | null)) => {
             this.logger.info(JSON.stringify(msg?.content.toString()) || '');

@@ -3,7 +3,7 @@ const CoreReference = {
     CliApp: Symbol.for("ICliApp"),
     AppConfig: Symbol.for("IAppConfig"),
     AppRouter: Symbol.for("IAppRouter"),
-    DataRouter: Symbol.for("IDataRouter"),
+    FollowedRouter: Symbol.for("IFollowedRouter"),
     SyncCommand: Symbol.for("ISyncCommand"),
     ProducerCommand: Symbol.for("IProducerCommand"),
 };
@@ -16,7 +16,8 @@ const ServiceReference = {
 const AdaptersReference = {
     IAmpqClient: Symbol.for("IAmpqClient"),
     ConsoleLogger: Symbol.for("IConsoleLogger"),
-    IMongoDBClient: Symbol.for("IMongoDBClient"),
+    IDatabaseClient: Symbol.for("IDatabaseClient"),
+    IRepositoryFactory: Symbol.for("IRepositoryFactory"),
 };
 
 

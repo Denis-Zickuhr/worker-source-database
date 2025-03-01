@@ -1,12 +1,12 @@
 import Express, {NextFunction} from "express";
-import {IHttpApp, IRouter} from "../../types";
+import {IHttpApp, IRouter} from "../types";
 import {inject, injectable} from "inversify";
-import {Reference} from "../../../types";
-import {IAppConfig} from "../../config/config";
-import ConsoleLogger from "../../../adapters/logger/ConsoleLogger";
+import {Reference} from "../../types";
+import {IAppConfig} from "../../core/config/config";
+import ConsoleLogger from "../../adapters/logger/ConsoleLogger";
 import {ZodError} from "zod";
 import 'express-async-errors';
-import {HttpStatus, HttpStatusMessage} from "../../../adapters/http/status";
+import {HttpStatus, HttpStatusMessage} from "../../adapters/http/status";
 
 @injectable()
 export class HttpApp implements IHttpApp {
@@ -17,7 +17,7 @@ export class HttpApp implements IHttpApp {
     constructor(
         @inject(Reference.AppConfig) private config: IAppConfig,
         @inject(Reference.AppRouter) private appRouter: IRouter,
-        @inject(Reference.DataRouter) private dataRouter: IRouter,
+        @inject(Reference.FollowedRouter) private followedRouter: IRouter,
         @inject(Reference.ConsoleLogger) private logger: ConsoleLogger,
     ) {
         this.app = Express();
@@ -30,7 +30,7 @@ export class HttpApp implements IHttpApp {
         this.app.use(Express.json());
         this.app.use(Express.urlencoded({ extended: true }));
         this.app.use(this.appRouter.router);
-        this.app.use(this.dataRouter.router);
+        this.app.use('/v1/followed', this.followedRouter.router);
 
         this.app.use(this.error);
     }

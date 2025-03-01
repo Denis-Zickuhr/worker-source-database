@@ -1,6 +1,6 @@
-import {Db, MongoClient} from "mongodb";
+import {ClientSession, Db, MongoClient} from "mongodb";
 
-export interface IMongoClient {
+export interface IDataBaseClient {
     connect(): Promise<void>;
     disconnect(): Promise<void>;
     get client(): MongoClient;
