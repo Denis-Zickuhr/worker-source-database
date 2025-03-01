@@ -12,7 +12,7 @@ options:
     - name: database-connection
       options:
         value: followed # Database name for operation
-        url: ${{DATA_BASE_URL:-database://root:rootpassword@host.docker.internal:27017/followed}}
+        url: ${{DATA_BASE_URL:-mongodb://root:rootpassword@host.docker.internal:27017/followed}}
 
   dev:
     port: ${{APP_PORT:-3000}}

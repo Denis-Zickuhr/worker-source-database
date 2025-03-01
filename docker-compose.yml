@@ -27,3 +27,17 @@ services:
       - /app/node_modules
     environment:
       NODE_ENV: development
+  cli-app-consumer:
+    restart: always
+    build:
+      context: .
+      target: dev
+    command: "npm run cli-app:dev -- -- consumer"
+    volumes:
+      - ./:/app
+      - ./src:/app/src
+      - ./bin:/app/bin
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+

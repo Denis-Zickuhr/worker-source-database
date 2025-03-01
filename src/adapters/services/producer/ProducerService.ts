@@ -1,7 +1,7 @@
 import {inject, injectable} from "inversify";
 import {Reference} from "../../../types";
 import logger from "../../logger/ConsoleLogger";
-import {IFollowedService, ProducerOptions} from "../types";
+import {IFollowedHttpService, ProducerOptions} from "../types";
 import {IAmpqClient} from "../../ampq/types";
 
 @injectable()
@@ -9,7 +9,7 @@ export class ProducerService {
 
     constructor(
         @inject(Reference.ConsoleLogger) private logger: logger,
-        @inject(Reference.IFollowedService) private followedService: IFollowedService,
+        @inject(Reference.IFollowedHttpService) private followedService: IFollowedHttpService,
         @inject(Reference.IAmpqClient) private ampq: IAmpqClient,
     ) {
     }

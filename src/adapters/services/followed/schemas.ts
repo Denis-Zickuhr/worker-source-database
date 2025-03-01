@@ -8,8 +8,24 @@ export const GetDocumentByIdSchema = z.object({
     id: mongoDbIdSchema,
 });
 
+export enum FollowedIncludeTypes {
+    FOLLOWED_DATA = "followedData",
+}
+
+const IncludedEnum = z.enum([FollowedIncludeTypes.FOLLOWED_DATA]);
+
 export const GetFollowedSchema = GetDocumentByIdSchema.extend({
-    includeFollowed: z.coerce.boolean().default(false)
+    included: z.string()
+        .transform((e) => e.split(','))
+        .optional()
+        .refine((arr) => {
+            if (!arr) {
+                return true;
+            }
+            return arr?.every((item) => IncludedEnum.safeParse(item).success)
+        }, {
+            message: `Included field can only have values from the enumerated types [${Object.values(IncludedEnum.Values).join(', ')}]`,
+        })
 });
 
 export const DeleteDocumentByIdSchema = z.object({
@@ -40,6 +56,12 @@ export const ListFollowedSchema =  PaginatedListSchema.extend({
     filter: z.object({
         name: z.string().optional(),
         source: z.string().optional(),
+    }).optional(),
+});
+
+export const ListFollowedDataSchema =  PaginatedListSchema.extend({
+    filter: z.object({
+        name: z.string().optional(),
     }).optional(),
 });
 

@@ -3,8 +3,7 @@ import e from "express";
 import {IRouter} from "../../../types";
 import {inject, injectable} from "inversify";
 import {Reference} from "../../../../types";
-import {IAppConfig} from "../../../../core/config/config";
-import {FollowedService} from "../../../../adapters/services/followed/FollowedService";
+import {IFollowedHttpService} from "../../../../adapters/services/types";
 
 @injectable()
 export class FollowedRouter implements IRouter {
@@ -16,8 +15,7 @@ export class FollowedRouter implements IRouter {
     }
 
     constructor(
-        @inject(Reference.AppConfig) private config: IAppConfig,
-        @inject(Reference.IFollowedService) private followedService: FollowedService,
+        @inject(Reference.IFollowedHttpService) private followedService: IFollowedHttpService,
     ) {
         this._router = Express.Router();
         this.setup();

@@ -1,24 +1,24 @@
-import {IFollowedService} from "../types";
+import {IFollowedHttpService} from "../../types";
 import {inject, injectable} from "inversify";
 import Express from "express";
-import {Reference} from "../../../types";
-import {Followed, FollowedStatus} from "../../database/model/Followed";
+import {Reference} from "../../../../types";
+import {Followed, FollowedStatus} from "../../../database/model/Followed";
 import {ObjectId} from "mongodb";
 import {
-    DeleteDocumentByIdSchema,
+    DeleteDocumentByIdSchema, FollowedIncludeTypes,
     GetFollowedSchema,
     ListFollowedSchema,
     PatchFollowedSchema,
     PostFollowedSchema
-} from "./schemas";
-import ConsoleLogger from "../../logger/ConsoleLogger";
-import {HttpStatus, HttpStatusMessage} from "../../http/status";
-import {IRepositoryFactory} from "../../factories/types";
-import {IDataBaseRepository} from "../../database/repository/types";
-import {FollowedData} from "../../database/model/FollowedData";
+} from "../schemas";
+import ConsoleLogger from "../../../logger/ConsoleLogger";
+import {HttpStatus, HttpStatusMessage} from "../../../http/status";
+import {IRepositoryFactory} from "../../../factories/types";
+import {IDataBaseRepository} from "../../../database/repository/types";
+import {FollowedData} from "../../../database/model/FollowedData";
 
 @injectable()
-export class FollowedService implements IFollowedService {
+export class FollowedHttpService implements IFollowedHttpService {
 
     private followedRepository: IDataBaseRepository<Followed>;
     private followedDataRepository: IDataBaseRepository<FollowedData>;
@@ -41,8 +41,8 @@ export class FollowedService implements IFollowedService {
             return;
         }
 
-        let followedData = {};
-        if (getRequestData.includeFollowed){
+        let followedData = null;
+        if (getRequestData.included?.includes(FollowedIncludeTypes.FOLLOWED_DATA)){
             followedData = await this.followedDataRepository.findOneById(followed.entry_id);
         }
 

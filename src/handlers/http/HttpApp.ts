@@ -1,4 +1,4 @@
-import Express, {NextFunction} from "express";
+import Express from "express";
 import {IHttpApp, IRouter} from "../types";
 import {inject, injectable} from "inversify";
 import {Reference} from "../../types";
@@ -18,6 +18,7 @@ export class HttpApp implements IHttpApp {
         @inject(Reference.AppConfig) private config: IAppConfig,
         @inject(Reference.AppRouter) private appRouter: IRouter,
         @inject(Reference.FollowedRouter) private followedRouter: IRouter,
+        @inject(Reference.FollowedDataRouter) private followedDataRouter: IRouter,
         @inject(Reference.ConsoleLogger) private logger: ConsoleLogger,
     ) {
         this.app = Express();
@@ -31,6 +32,7 @@ export class HttpApp implements IHttpApp {
         this.app.use(Express.urlencoded({ extended: true }));
         this.app.use(this.appRouter.router);
         this.app.use('/v1/followed', this.followedRouter.router);
+        this.app.use('/v1/followed/data', this.followedDataRouter.router);
 
         this.app.use(this.error);
     }

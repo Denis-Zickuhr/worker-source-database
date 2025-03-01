@@ -3,6 +3,7 @@ import {DocumentWithId} from "../repository/types";
 type FollowedDataHistory = {
     timestamp: number,
     value: number,
+    error: boolean,
 }
 
 export type FollowedData = {
