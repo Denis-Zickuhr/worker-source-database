@@ -3,13 +3,16 @@ options:
   services:
     - name: sync-consumer
       options:
-        value: wp-queue-sync
-        url: ${{RABBITMQ_URL:-amqp://guest:guest@localhost:5672}}
+        value: wp-queue-sync # Queue
+        url: ${{RABBITMQ_URL:-amqp://guest:guest@host.docker.internal:5672}}
     - name: sync-producer
       options:
-        value: wp-queue-sync
-        url: ${{RABBITMQ_URL:-amqp://guest:guest@localhost:5672}}
+        value: wp-queue-sync # Queue
+        url: ${{RABBITMQ_URL:-amqp://guest:guest@host.docker.internal:5672}}
+    - name: database-connection
+      options:
+        value: followed # Database name for operation
+        url: ${{DATA_BASE_URL:-mongodb://root:rootpassword@host.docker.internal:27017/followed}}
 
   dev:
     port: ${{APP_PORT:-3000}}
-    dbUrl: ${{DATA_BASE_URL:-mongodb://localhost:27017/mydb}}

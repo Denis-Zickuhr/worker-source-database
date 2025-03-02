@@ -13,7 +13,6 @@ const ServiceSchema = z.object({
 
 const DevSchema = z.object({
     port: z.number(),
-    dbUrl: z.string(),
 });
 
 const AppSchema =  z.object({
@@ -32,7 +31,7 @@ export interface IAppConfig {
     services: Service[];
     dev: undefined|Dev;
 
-    findService(serviceName: string): Service|undefined;
+    findService(serviceName: string): Service;
 }
 
 export class AppConfig implements IAppConfig {
@@ -40,10 +39,15 @@ export class AppConfig implements IAppConfig {
     services: Service[];
     dev: undefined|Dev;
 
-    findService(serviceName: string): Service|undefined {
-        return this.services.find((v) => {
+    findService(serviceName: string): Service {
+        const service = this.services.find((v) => {
             return  v.name === serviceName;
         });
+
+        if (!service) {
+            throw new Error(`Service ${serviceName} not found`);
+        }
+        return service;
     }
 
     constructor(app: Record<any, any>) {
@@ -53,4 +57,10 @@ export class AppConfig implements IAppConfig {
         this.services = parsedApp.options.services;
         this.dev = parsedApp.options.dev;
     }
+}
+
+export enum Services {
+    DATABASE_CONNECTION = 'database-connection',
+    SYNC_PRODUCER = 'sync-producer',
+    SYNC_CONSUMER = 'sync-consumer',
 }
