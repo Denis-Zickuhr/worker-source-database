@@ -1,4 +1,4 @@
-import {IFollowedHttpDataService, IFollowedHttpService} from "../../types";
+import {IFollowedDataHttpService, IFollowedHttpService} from "../../types";
 import {inject, injectable} from "inversify";
 import Express from "express";
 import {Reference} from "../../../../types";
@@ -14,7 +14,7 @@ import {IDataBaseRepository} from "../../../database/repository/types";
 import {FollowedData} from "../../../database/model/FollowedData";
 
 @injectable()
-export class FollowedHttpDataService implements IFollowedHttpDataService {
+export class FollowedDataHttpService implements IFollowedDataHttpService {
 
     private followedDataRepository: IDataBaseRepository<FollowedData>;
 
@@ -42,7 +42,8 @@ export class FollowedHttpDataService implements IFollowedHttpDataService {
 
     async list(req: Express.Request, res: Express.Response) {
         const parsedRequest = ListFollowedDataSchema.parse(req.query);
-        const { page, limit, sortBy, sortOrder, filter } = parsedRequest;
+        const { page, limit, sortBy, sortOrder, name } = parsedRequest;
+        const filter = { name };
         const pagination = { page, limit, sortBy, sortOrder };
 
         const query: any = {};
@@ -73,7 +74,7 @@ export class FollowedHttpDataService implements IFollowedHttpDataService {
             return;
         }
 
-        if (!await this.followedDataRepository.delete(followed._id)) {
+        if (!await this.followedDataRepository.deleteOneById(followed._id)) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
                 error: "Failed to delete"
             });

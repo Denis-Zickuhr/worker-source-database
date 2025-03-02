@@ -1,6 +1,6 @@
 import {DocumentWithId, IDataBaseRepository, ListResponse, OperationParams} from "./types";
 import {unmanaged} from "inversify";
-import {ClientSession, Filter, OptionalUnlessRequiredId} from "mongodb";
+import {Filter, OptionalUnlessRequiredId} from "mongodb";
 import {IDataBaseClient} from "../client/types";
 import {PaginatedListFilters} from "../../services/followed/schemas";
 
@@ -63,10 +63,20 @@ export class DataBaseRepository<T extends DocumentWithId> implements IDataBaseRe
         } as ListResponse<T>;
     }
 
-    async delete(id: string, operationParams: OperationParams = {}): Promise<boolean> {
+    async deleteOneById(id: string, operationParams: OperationParams = {}): Promise<boolean> {
         await this.client.connect();
         const result = await this.client.db.collection<T>(this.table).deleteOne(
             { _id: id } as Filter<T>,
+            operationParams
+        );
+        await this.client.disconnect();
+        return result.deletedCount > 0;
+    }
+
+    async delete(params: Filter<T>, operationParams: OperationParams = {}): Promise<boolean> {
+        await this.client.connect();
+        const result = await this.client.db.collection<T>(this.table).deleteMany(
+            params,
             operationParams
         );
         await this.client.disconnect();

@@ -18,7 +18,7 @@ export class FollowedDataPerformer implements IFollowedDataPerformer {
             this.logger.info(`followedDataPerformer successfully performed (value ${0})`);
             return {
                 success: true,
-                value: 0,
+                value: Math.floor(Math.random() * (1000 - 200 + 1) + 200),
             }
         } catch(err: any) {
             this.logger.error(err.message);

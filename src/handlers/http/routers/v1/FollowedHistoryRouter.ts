@@ -3,10 +3,10 @@ import e from "express";
 import {IRouter} from "../../../types";
 import {inject, injectable} from "inversify";
 import {Reference} from "../../../../types";
-import {IFollowedDataHttpService} from "../../../../adapters/services/types";
+import {IFollowedHistoryHttpService} from "../../../../adapters/services/types";
 
 @injectable()
-export class FollowedDataRouter implements IRouter {
+export class FollowedHistoryRouter implements IRouter {
     private readonly _router: Router;
 
 
@@ -15,15 +15,13 @@ export class FollowedDataRouter implements IRouter {
     }
 
     constructor(
-        @inject(Reference.IFollowedDataHttpService) private service: IFollowedDataHttpService,
+        @inject(Reference.IFollowedHistoryHttpService) private service: IFollowedHistoryHttpService,
     ) {
         this._router = Express.Router();
         this.setup();
     }
 
     private setup() {
-        this._router.get('', this.service.get.bind(this.service));
         this._router.get('/list', this.service.list.bind(this.service));
-        this._router.delete('', this.service.delete.bind(this.service));
     }
 }

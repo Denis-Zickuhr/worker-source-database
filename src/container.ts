@@ -16,10 +16,14 @@ import {ProducerService} from "./adapters/services/producer/ProducerService";
 import {MongoDBClient} from "./adapters/database/client/MongoDBClient";
 import {RepositoryFactory} from "./adapters/factories/RepositoryFactory";
 import {FollowedDataRouter} from "./handlers/http/routers/v1/FollowedDataRouter";
-import {FollowedHttpDataService} from "./adapters/services/followed/data/FollowedHttpDataService";
-import {FollowedSyncDataService} from "./adapters/services/followed/data/FollowedSyncDataService";
+import {FollowedDataHttpService} from "./adapters/services/followed/data/FollowedDataHttpService";
+import {FollowedDataSyncService} from "./adapters/services/followed/data/FollowedDataSyncService";
 import {FollowedDataPerformer} from "./adapters/services/perform/FollowedDataPerformer";
 import {ConsumerService} from "./adapters/services/consumer/ConsumerService";
+import {
+    FollowedHistoryRouter
+} from "./handlers/http/routers/v1/FollowedHistoryRouter";
+import {FollowedHistoryHttpService} from "./adapters/services/followed/data/FollowedHistoryHttpService";
 
 const isDevelopment: boolean = process.env.NODE_ENV === "development";
 
@@ -36,17 +40,18 @@ container.bind(Reference.IAmpqClient).to(AmpqRabbitMQClient);
 container.bind(Reference.AppRouter).to(AppRouter);
 container.bind(Reference.FollowedRouter).to(FollowedRouter);
 container.bind(Reference.FollowedDataRouter).to(FollowedDataRouter);
+container.bind(Reference.FollowedDataHistoryRouter).to(FollowedHistoryRouter);
 container.bind(Reference.SyncCommand).to(ConsumeCommand);
 container.bind(Reference.ProducerCommand).to(ProducerCommand);
 container.bind(Reference.ProducerService).to(ProducerService);
 container.bind(Reference.ConsumerService).to(ConsumerService);
 container.bind(Reference.IFollowedHttpService).to(FollowedHttpService);
-container.bind(Reference.IFollowedHttpDataService).to(FollowedHttpDataService);
-container.bind(Reference.IFollowedSyncDataService).to(FollowedSyncDataService);
+container.bind(Reference.IFollowedDataHttpService).to(FollowedDataHttpService);
+container.bind(Reference.IFollowedHistoryHttpService).to(FollowedHistoryHttpService);
+container.bind(Reference.IFollowedDataSyncService).to(FollowedDataSyncService);
 container.bind(Reference.IFollowedDataPerformer).to(FollowedDataPerformer);
 container.bind(Reference.IDatabaseClient).to(MongoDBClient);
 container.bind(Reference.IRepositoryFactory).to(RepositoryFactory);
-
 
 container.bind<IAppConfig>(Reference.AppConfig).toDynamicValue(() => {
     const config = new ConfigLoader("Config.yml");

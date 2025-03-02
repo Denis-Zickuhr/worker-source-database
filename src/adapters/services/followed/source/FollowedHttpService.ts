@@ -16,12 +16,14 @@ import {HttpStatus, HttpStatusMessage} from "../../../http/status";
 import {IRepositoryFactory} from "../../../factories/types";
 import {IDataBaseRepository} from "../../../database/repository/types";
 import {FollowedData} from "../../../database/model/FollowedData";
+import {FollowedHistory} from "../../../database/model/FollowedHistory";
 
 @injectable()
 export class FollowedHttpService implements IFollowedHttpService {
 
     private followedRepository: IDataBaseRepository<Followed>;
     private followedDataRepository: IDataBaseRepository<FollowedData>;
+    private followedDataHistoryRepository: IDataBaseRepository<FollowedHistory>;
 
     constructor(
         @inject(Reference.IRepositoryFactory) private readonly repositoryFactory: IRepositoryFactory,
@@ -29,6 +31,7 @@ export class FollowedHttpService implements IFollowedHttpService {
     ) {
         this.followedRepository = this.repositoryFactory.create<Followed>('followed');
         this.followedDataRepository = this.repositoryFactory.create<FollowedData>('followed_data');
+        this.followedDataHistoryRepository = this.repositoryFactory.create<FollowedHistory>('followed_data_history');
     }
 
     async get(req: Express.Request, res: Express.Response) {
@@ -116,8 +119,7 @@ export class FollowedHttpService implements IFollowedHttpService {
             name: postRequestData.name,
             value: 0,
             h_value: 0,
-            l_value: 0,
-            history: []
+            l_value: 0
         });
         const followed = await this.followedRepository.insert({
             _id: new ObjectId().toHexString(),
@@ -142,12 +144,10 @@ export class FollowedHttpService implements IFollowedHttpService {
             return;
         }
 
-        const followedData = await this.followedDataRepository.findOneById(followed.entry_id);
-        if (followedData){
-            await this.followedDataRepository.delete(followedData._id);
-        }
+        await this.followedDataHistoryRepository.delete({ followed_id: followed.entry_id });
+        await this.followedDataRepository.deleteOneById(followed.entry_id);
 
-        if (!await this.followedRepository.delete(followed._id)) {
+        if (!await this.followedRepository.deleteOneById(followed._id)) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({error: "Failed to delete"});
             this.logger.debug(`failed to delete row ${requestData.id}`);
             return;

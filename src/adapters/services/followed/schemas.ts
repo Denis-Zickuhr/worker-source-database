@@ -60,9 +60,27 @@ export const ListFollowedSchema =  PaginatedListSchema.extend({
 });
 
 export const ListFollowedDataSchema =  PaginatedListSchema.extend({
-    filter: z.object({
-        name: z.string().optional(),
-    }).optional(),
+    name: z.string().optional(),
 });
+
+export const ListFollowedHistorySchema =  PaginatedListSchema.extend({
+    sortBy: z.string().optional().default("timestamp"),
+    sortOrder: z.enum(["asc", "desc"]).optional().default("desc"),
+    id: z.string().optional(),
+    name: z.string().optional(),
+    after: z.string().datetime().optional(),
+    before: z.string().datetime().optional(),
+});
+
+export const ListFollowedHistoryResponseSchema = z.array(z.object({
+    _id: z.string(),
+    followed_id: z.string(),
+    timestamp: z.preprocess(
+        (value) => (typeof value === 'number' ? new Date(value) : value),
+        z.date().transform((date) => date.toISOString())
+    ),
+    value: z.number(),
+    error: z.boolean(),
+}));
 
 export type PaginatedListFilters = z.infer<typeof PaginatedListSchema>;

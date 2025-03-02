@@ -19,6 +19,7 @@ export class HttpApp implements IHttpApp {
         @inject(Reference.AppRouter) private appRouter: IRouter,
         @inject(Reference.FollowedRouter) private followedRouter: IRouter,
         @inject(Reference.FollowedDataRouter) private followedDataRouter: IRouter,
+        @inject(Reference.FollowedDataHistoryRouter) private followedDataHistoryRouter: IRouter,
         @inject(Reference.ConsoleLogger) private logger: ConsoleLogger,
     ) {
         this.app = Express();
@@ -33,6 +34,7 @@ export class HttpApp implements IHttpApp {
         this.app.use(this.appRouter.router);
         this.app.use('/v1/followed', this.followedRouter.router);
         this.app.use('/v1/followed/data', this.followedDataRouter.router);
+        this.app.use('/v1/followed/history', this.followedDataHistoryRouter.router);
 
         this.app.use(this.error);
     }

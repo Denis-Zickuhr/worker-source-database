@@ -4,7 +4,7 @@ import * as amqp from 'amqplib';
 export interface IAmpqClient {
     consume(
         options: IConsumeOptions,
-        consumerCallback: (msg: amqp.ConsumeMessage | null) => void
+        consumerCallback: (msg: amqp.ConsumeMessage | null) => Promise<void>
     ): void;
 
     produce(

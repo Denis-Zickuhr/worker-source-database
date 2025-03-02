@@ -15,13 +15,17 @@ export interface IFollowedHttpService {
     paginatePending(ignoreRate?: boolean): AsyncGenerator<Followed>;
 }
 
-export interface IFollowedHttpDataService {
+export interface IFollowedDataHttpService {
     get(req: Express.Request, res: Express.Response): Promise<void>;
     list(req: Express.Request, res: Express.Response): Promise<void>;
     delete(req: Express.Request, res: Express.Response): Promise<void>;
 }
 
-export interface IFollowedSyncService {
+export interface IFollowedHistoryHttpService {
+    list(req: Express.Request, res: Express.Response): Promise<void>;
+}
+
+export interface IFollowedDataSyncService {
     sync(id: ConsumeMessage): Promise<void>;
 }
 

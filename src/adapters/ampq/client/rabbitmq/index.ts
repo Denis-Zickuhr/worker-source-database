@@ -38,14 +38,14 @@ class AmpqRabbitMQClient implements IAmpqClient {
         }
     }
 
-    public async consume(options: IConsumeOptions, consumerCallback: (msg: amqp.ConsumeMessage | null) => void): Promise<void> {
+    public async consume(options: IConsumeOptions, consumerCallback: (msg: amqp.ConsumeMessage | null) => Promise<void>): Promise<void> {
         await this.connect();
         await this.setupQueue(options);
 
         this.logger.info(`Started consuming messages in queue: ${options.queue}`);
-        await this.channel!.consume(options.queue, (msg) => {
+        await this.channel!.consume(options.queue, async (msg) => {
             if (msg) {
-                consumerCallback(msg);
+                await consumerCallback(msg);
                 this.channel?.ack(msg);
             }
         });

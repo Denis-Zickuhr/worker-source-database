@@ -1,5 +1,3 @@
-import {FollowedDataPerformer} from "./adapters/services/perform/FollowedDataPerformer";
-
 const CoreReference = {
     HttpApp: Symbol.for("IHttpApp"),
     CliApp: Symbol.for("ICliApp"),
@@ -7,6 +5,7 @@ const CoreReference = {
     AppRouter: Symbol.for("IAppRouter"),
     FollowedRouter: Symbol.for("IFollowedRouter"),
     FollowedDataRouter: Symbol.for("IFollowedDataRouter"),
+    FollowedDataHistoryRouter: Symbol.for("FollowedDataHistoryRouter"),
     SyncCommand: Symbol.for("ISyncCommand"),
     ProducerCommand: Symbol.for("IProducerCommand"),
 };
@@ -15,8 +14,9 @@ const ServiceReference = {
     ProducerService: Symbol.for("IProducerService"),
     ConsumerService: Symbol.for("IConsumerService"),
     IFollowedHttpService: Symbol.for("IFollowedService"),
-    IFollowedHttpDataService: Symbol.for("IFollowedDataService"),
-    IFollowedSyncDataService: Symbol.for("IFollowedSyncDataService"),
+    IFollowedDataHttpService: Symbol.for("IFollowedDataHttpService"),
+    IFollowedHistoryHttpService: Symbol.for("IFollowedHistoryHttpService"),
+    IFollowedDataSyncService: Symbol.for("IFollowedDataSyncService"),
     IFollowedDataPerformer: Symbol.for("IFollowedDataPerformer"),
 };
 

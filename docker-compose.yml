@@ -14,6 +14,8 @@ services:
       - /app/node_modules
     environment:
       NODE_ENV: development
+    env_file:
+      - .env.local
   cli-app-producer:
     restart: always
     build:
@@ -27,6 +29,8 @@ services:
       - /app/node_modules
     environment:
       NODE_ENV: development
+    env_file:
+      - .env.local
   cli-app-consumer:
     restart: always
     build:
@@ -40,4 +44,5 @@ services:
       - /app/node_modules
     environment:
       NODE_ENV: development
-
+    env_file:
+      - .env.local

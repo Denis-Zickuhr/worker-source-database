@@ -14,4 +14,3 @@ FROM base as dev
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm install
-
